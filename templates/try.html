@@ -1,0 +1,21 @@
+<html>
+    
+    <body>
+    
+        <form method="POST">
+            
+            <input type='text' placeholder='Search keyword' name='search'>
+            <button type='submit'>Submit</button>
+        
+        </form>
+        
+        {% for i,j in data %}
+            
+           <li> {{j}} &nbsp {{i}}</li>
+                    
+        {% endfor %}
+    
+    
+    </body>
+
+</html>
