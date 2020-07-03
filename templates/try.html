@@ -1,21 +1,69 @@
 <html>
-    
-    <body>
-    
-        <form method="POST">
-            
-            <input type='text' placeholder='Search keyword' name='search'>
-            <button type='submit'>Submit</button>
-        
-        </form>
-        
-        {% for i,j in data %}
-            
-           <li> {{j}} &nbsp {{i}}</li>
-                    
-        {% endfor %}
-    
-    
-    </body>
+
+<body>
+
+<link href='https://fonts.googleapis.com/css?family=Roboto:100,400,300,500,700' rel='stylesheet' type='text/css'>
+
+<div align="center" class="fond">
+<br />
+
+            <div class="bouton_4" onclick='something()'>
+                <a href="#123"><img src="https://img.icons8.com/offices/40/000000/plus.png"/>
+                    <span class="texteduboutton_4">Cool Features</span></a>
+            </div>
+
+
+<script>
+
+function something()
+	{
+	
+		console.log('Im in console')
+	}
+
+
+
+</script>
+
+
+
+<style>
+
+/*///////////////////////////////BOUTON _ 4///////////////////////////////////////*/
+.bouton_4{
+    width:40px;
+    height:40px;
+    padding:10px;
+    border-radius:40px;
+    background-color:transparent;
+    overflow:hidden;
+    -webkit-transition:all 0.2s ease-in;
+    -moz-transition:all 0.2s ease-in;
+    -ms-transition:all 0.2s ease-in;
+    -o-transition:all 0.2s ease-in;
+    transition:all 0.2s ease-in;
+}
+.bouton_4:hover{
+    width:200px;
+    height:40px;
+    border-radius:40px;
+    background-color:#97bf0d;
+}
+.texteduboutton_4
+{
+    width:70%;
+    padding-right: 10px;
+    float:right;
+    line-height:40px;
+    color:#ffffff;
+    font-family:'Roboto';
+    font-weight:300;
+    font-size:18px;
+}
+
+
+</style>
+
+</body>
 
 </html>

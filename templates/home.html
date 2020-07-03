@@ -16,8 +16,21 @@
 
 </head>
 <body>
+	
+	
+	<link href='https://fonts.googleapis.com/css?family=Roboto:100,400,300,500,700' rel='stylesheet' type='text/css'>
 
-	<ul>
+	<div align="center" class="fond">
+	<br />
+
+            <div class="bouton_4" onclick='something()' id='bouton_4'>
+                <a ><img style='width: 31px;' src="https://img.icons8.com/offices/40/000000/plus.png"/>
+                    <span class="texteduboutton_4">Cool Features</span></a>
+            </div>
+
+	
+	
+	<ul style='visibility: hidden;' id='options'>
 		<form  method='POST'>
 			
 			<select name='article'>
@@ -28,13 +41,16 @@
 				
 			</select>
 			
+			<input type='text' placeholder="Search news" name='news_search'>
+			
 			<button type="submit">Submit</button>
 		</form>
 
-
+		<button onclick='update()'>Update</button>
+		<a href='{{url_for('clear')}}'><button >Clear</button></a>
 	</ul>
 
-	{% for author,summary,title,date_c,date_p,full_text,img,news_s in data %}
+	{% for author,summary,title,date_c,date_p,full_text,img,news_s, id in data %}
 		<div class="wrapper">
 	    		
 	    		<div class="card radius shadowDepth1">
@@ -59,7 +75,7 @@
 	    				</div>
 
 	    				<article class="card__article">
-		    				<h2><a href="#">{{title}}</a></h2>
+		    				<h2><a href="{{url_for('view', index=news_s ,key=id)}}">{{title}}</a></h2>
 
 		    				<p>{{summary}}</p>
 		    			</article>
@@ -77,7 +93,7 @@
 	    				</div>
 	    			</div>
 	    		</div>
-
+			
 
 	    	</div>
     	
@@ -97,6 +113,26 @@ $(this).toggleClass('share-expanded');
 
 });
 
+
+function something()
+	{
+		document.getElementById('options').style.visibility = 'visible';	
+		document.getElementById('bouton_4').style.visibility = 'hidden';
+	}
+
+function update()
+	{
+	
+		window.location.href='/update/';
+	
+	}
+
+function clear()
+	{
+		console.log('Clear')
+		window.location.href='/clear/';
+		
+	}
 
 </script>
 
@@ -326,6 +362,40 @@ h2 {
 	.googleplus:hover {
 		color: #eee;
 	}
+
+
+
+.bouton_4{
+    width:40px;
+    height:40px;
+    padding:10px;
+    border-radius:40px;
+    background-color:transparent;
+    overflow:hidden;
+    -webkit-transition:all 0.2s ease-in;
+    -moz-transition:all 0.2s ease-in;
+    -ms-transition:all 0.2s ease-in;
+    -o-transition:all 0.2s ease-in;
+    transition:all 0.2s ease-in;
+}
+.bouton_4:hover{
+    width:200px;
+    height:40px;
+    border-radius:40px;
+    background-color:#97bf0d;
+}
+.texteduboutton_4
+{
+    width:70%;
+    padding-right: 10px;
+    float:right;
+    line-height:40px;
+    color:#ffffff;
+    font-family:'Roboto';
+    font-weight:300;
+    font-size:18px;
+}
+
 
 
    </style>

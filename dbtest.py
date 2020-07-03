@@ -15,21 +15,42 @@ def search(title,index_name):
 
 def get_data(search, index_name):
     es = Elasticsearch(['localhost:9200'])
-    r = es.search(index = index_name, body={'query':{'match':{'Title':search}}})
+    result = pd.DataFrame()
+    for k in search:
+        r = es.search(index = index_name, body={'query':{'match':{'full_text':k}}})
+        
+        test = r['hits']['hits']
+        
+        
+        for i in test:
+            t = pd.DataFrame()
+            t = pd.DataFrame([i['_source']]) 
+            t['id'] = i['_id']
+            try:
+                if t.loc[0]['_id'] not in result['_id'].values:
+                    result = result.append(t)
+            except:
+                result = result.append(t)
+    return result 
+        
+
+def display_data(search, index_name):
+    es = Elasticsearch(['localhost:9200'])
+    r = es.search(index = index_name, body={'query':{'match':{'_id':search}}})
     
-    test = r['hits']['hits']    
+    test = r['hits']['hits']
     
     result = pd.DataFrame()
     for i in test:
         t = pd.DataFrame()
         t = pd.DataFrame([i['_source']]) 
+        t['id'] = i['_id']
         try:
-            if t.loc[0]['Title'] not in result['Title'].values:
+            if t.loc[0]['_id'] not in result['_id'].values:
                 result = result.append(t)
         except:
             result = result.append(t)
         
-    
     return result
 
 def get_data_index(index):
@@ -39,12 +60,14 @@ def get_data_index(index):
     
     test = r['hits']['hits']    
     
-    
+    # test[0]['_id']
     for i in test:
         t = pd.DataFrame()
         t = pd.DataFrame([i['_source']]) 
+        t['id'] = [i['_id']]
+        
         try:
-            if t.loc[0]['Title'] not in result['Title'].values:
+            if t.loc[0]['id'] not in result['id'].values:
                 result = result.append(t)
         except:
                 result = result.append(t)
@@ -53,8 +76,16 @@ def get_data_index(index):
 def get_index():
     es = Elasticsearch(['localhost:9200'])
     total = list(es.indices.get_alias('*').keys())
-    return total    
+    
+    final_list=[]
+    for i in total:
+        r = es.search(index = i)
+    
+        test = r['hits']['hits']    
+        final_list.append(i+ ' '+'('+str(len(test))+')')
+    return final_list
 
+# index = 'www.bbc.com'
 
 def get_everything():
     es = Elasticsearch(['localhost:9200'])
@@ -70,9 +101,33 @@ def get_everything():
         for i in test:
             t = pd.DataFrame()
             t = pd.DataFrame([i['_source']]) 
+            t['id'] = [i['_id']]
             try:
-                if t.loc[0]['Title'] not in result['Title'].values:
+                if t.loc[0]['id'] not in result['id'].values:
                     result = result.append(t)
             except:
                 result = result.append(t)
+    return result
+
+def get_only_data(search):
+    es = Elasticsearch(['localhost:9200'])
+    total = list(es.indices.get_alias('*').keys())
+    
+    result = pd.DataFrame()
+    for j in total:    
+        for k in search:
+            r = es.search(index = j, body={'query':{'match':{'full_text':k}}})
+            
+            test = r['hits']['hits']    
+            
+            
+            for i in test:
+                t = pd.DataFrame()
+                t = pd.DataFrame([i['_source']]) 
+                t['id'] = [i['_id']]
+                try:
+                    if t.loc[0]['id'] not in result['id'].values:
+                        result = result.append(t)
+                except:
+                    result = result.append(t)
     return result
