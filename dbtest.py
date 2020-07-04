@@ -78,12 +78,15 @@ def get_index():
     total = list(es.indices.get_alias('*').keys())
     
     final_list=[]
+    count = []
     for i in total:
         r = es.search(index = i)
     
         test = r['hits']['hits']    
-        final_list.append(i+ ' '+'('+str(len(test))+')')
-    return final_list
+        final_list.append(i)
+        count.append(len(test))
+    final =pd.DataFrame({'indices':final_list,'total':count})
+    return final
 
 # index = 'www.bbc.com'
 
