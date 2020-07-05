@@ -134,3 +134,26 @@ def get_only_data(search):
                 except:
                     result = result.append(t)
     return result
+
+def get_data_count(search):
+    es = Elasticsearch(['localhost:9200'])
+    total = list(es.indices.get_alias('*').keys())
+    
+    result = pd.DataFrame()
+    for j in total:    
+        for k in search:
+            r = es.search(index = j, body={'query':{'match':{'full_text':k}}})
+            
+            test = r['hits']['hits']    
+            
+            
+            for i in test:
+                t = pd.DataFrame()
+                t = pd.DataFrame([i['_source']]) 
+                t['id'] = [i['_id']]
+                try:
+                    if t.loc[0]['id'] not in result['id'].values:
+                        result = result.append(t)
+                except:
+                    result = result.append(t)
+    return result
