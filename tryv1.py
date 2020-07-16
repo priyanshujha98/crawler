@@ -186,7 +186,10 @@ def grab_data():
             
             driver.close()
         except:
-            driver.close()
+            try:
+                driver.close()
+            except:
+                pass
             pass
     
     final = pd.DataFrame({'Title':headline,'Author':AUTHORS,'Summary':SUMMARY,
