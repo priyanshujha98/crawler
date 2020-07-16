@@ -1,6 +1,8 @@
 import arxivscraper
 import datetime
 import pandas as pd
+from dbtest import send_data,search
+import numpy as np
 
 def axir_data():
     f = open('categories.txt','r')
@@ -13,7 +15,7 @@ def axir_data():
                 f[i].remove('')
             except:
                 pass
-            
+    #print (f)
     output = []
     for i in f:
         print(i[1])
@@ -34,7 +36,7 @@ def axir_data():
     df = df.rename(columns={'created':'Date'})
     df = df.rename(columns={'title':'Title'})
     df['Types'] = 'academic'
-    df['Site'] = 'arXiv'
+    df['Site'] = 'arxiv'
     df['Source'] =None
     
     for i in range(len(df.authors)):
@@ -65,8 +67,29 @@ def axir_data():
         var.append(u + df.id[i])
     
     df['Pdf_url'] = var
+    #print (df)
 
+    df = df.where(pd.notnull(df), np.nan)
+    for i in df.index:
+        try:
+            t = pd.DataFrame()
+            t =t.append(df.loc[i])
+            t.reset_index(drop=True, inplace=True)
+            try:
+                count = search(t.loc[0]['Title'],t.loc[0]['Site'])
+                print(count)
+                if count < 25 :
+                    test =t.loc[0].to_json()
+                    send_data(test,t.loc[0]['Site'])
+                    print('Data sent')
+                else:
+                    print('Skipped')
+            except:
+                test =t.loc[0].to_json()
+                send_data(test,t.loc[0]['Site'])
+                
+        except Exception as e:
+            print(e)
+    print('info fetched')
 
-
-
-
+axir_data()

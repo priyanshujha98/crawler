@@ -1,8 +1,10 @@
 from Bio import Entrez
 import json
 import pandas as pd
+from dbtest import send_data,search
+import numpy as np
 
-def search(query):
+def search_query(query):
 
     handle = Entrez.esearch(db='pubmed', 
                             sort='relevance', 
@@ -27,7 +29,7 @@ def pub_data():
     s=[]
     
     for j in f:
-        results = search(j)
+        results = search_query(j)
         id_list = results['IdList']
         papers = fetch_details(id_list)
         
@@ -46,7 +48,7 @@ def pub_data():
     ref = []
     pdf_url = []
     abstract = []
-    citation = []
+    
     for le in range(len(s)):
         data =json.loads(s[le])['MedlineCitation']['Article']
         try:
@@ -65,7 +67,7 @@ def pub_data():
             pdf_url.append(None)
         
         try:
-            site.append('PubMed')
+            site.append('pubmed')
         except:
             site.append(None)
         
@@ -102,11 +104,7 @@ def pub_data():
         
         try:
             aut = data['AuthorList']
-            try:
-                cit = aut[0]['AffiliationInfo'][0]['Affiliation']
-                citation.append(cit)
-            except:
-                citation.append(None)
+            
             
             a=''
             for i in aut:
@@ -117,7 +115,29 @@ def pub_data():
         except:
             author.append(None)
             
-        
-    df = pd.DataFrame({'Author':author,'Title':title,'Date':date, 'Types':types, 'Source':source, 'Site':site, 'Url':url, 'Ref':ref, 'Pdf_url':pdf_url, 'Abstract':abstract, 'Citation' : citation})
     
-    
+    df = pd.DataFrame({'Authors':author,'Title':title,'Date':date, 'Types':types, 'Source':source, 'Site':site, 'Url':url, 'Ref':ref, 'Pdf_url':pdf_url, 'Abstract':abstract})
+    df = df.where(pd.notnull(df), np.nan)
+    for i in df.index:
+        try:
+            t = pd.DataFrame()
+            t =t.append(df.loc[i])
+            t.reset_index(drop=True, inplace=True)
+            try:
+                count = search(t.loc[0]['Title'],t.loc[0]['Site'])
+                print(count)
+                if count < 25 :
+                    test =t.loc[0].to_json()
+                    send_data(test,t.loc[0]['Site'])
+                    print('Data sent')
+                else:
+                    print('Skipped')
+            except:
+                test =t.loc[0].to_json()
+                send_data(test,t.loc[0]['Site'])
+                
+        except Exception as e:
+            print(e)
+    print('info fetched')
+
+pub_data()
