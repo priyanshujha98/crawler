@@ -127,6 +127,8 @@ def grab_data():
     full = []
     img_url = []
     keywords=[]
+    url_news=[]
+    types = []
     for i in asli:
         try:
             chrome_options = Options()
@@ -139,6 +141,8 @@ def grab_data():
             news_source.append(i)
             headline.append(details.headline)
             timestamp.append(details.date_publish)
+            url_news.append(i)
+            types.append('newspaper')
             author=''
             for i in details.authors:
                 author = author + i
@@ -187,7 +191,7 @@ def grab_data():
     
     final = pd.DataFrame({'Title':headline,'Author':AUTHORS,'Summary':SUMMARY,
                               'full_text':full,'date_published':timestamp, 'date_crawled':date_crawled,
-                              'news_source':news_source,'img':img_url,'keywords':keywords})
+                              'news_source':news_source,'img':img_url,'keywords':keywords,'url_news':url_news,'types':types})
         
     for i in final.index:
         try:
