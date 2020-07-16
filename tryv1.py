@@ -92,7 +92,7 @@ def grab_data():
                     if 'http' not in i:
                         i = j+i
                 
-                print('\n',i)
+                #print('\n',i)
                     
                 response = requests.get(i,timeout=10)
                 details = newspaper(i)
@@ -105,7 +105,7 @@ def grab_data():
                 if count > 1500:
                     if len(description) > 10 or len(summary) > 10:
                 
-                        print("Appended")
+                        #print("Appended")
                         asli.append(i)
                         
                     else:
@@ -166,17 +166,19 @@ def grab_data():
             
             
             full.append(details.article)
-            
-            re = driver.find_elements_by_tag_name('img')
-            for i in re:
-                if'.jpg' in i.get_attribute('src'):
-                    im = i.get_attribute('src')
-                    break;
-            if len(im)>3:
-                img_url.append(im)
-            else:
-                img_url.append(None)
-            print('Done inside')
+            try:
+               re = driver.find_elements_by_tag_name('img')
+               for i in re:
+                    if'.jpg' in i.get_attribute('src'):
+                       im = i.get_attribute('src')
+                       break;
+               if len(im)>3:
+                    img_url.append(im)
+               else:
+                   img_url.append(None)
+            except:
+                   img_url.append(None)
+           # print('Done inside')
             
             driver.close()
         except:
@@ -194,17 +196,20 @@ def grab_data():
             t.reset_index(drop=True, inplace=True)
             try:
                 count = search(t.loc[0]['Title'],t.loc[0]['news_source'])
-                print(count)
+                #print(count)
                 if count < 25 :
                     test =t.loc[0].to_json()
                     send_data(test,t.loc[0]['news_source'])
-                    print('Data sent')
+                    #print('Data sent')
                 else:
-                    print('Skipped')
+                    pass
+                    #print('Skipped')
             except:
                 test =t.loc[0].to_json()
                 send_data(test,t.loc[0]['news_source'])
                 
         except Exception as e:
-            print(e)
-    print('info fetched')
+            pass
+            #print(e)
+    #print('info fetched')
+grab_data()

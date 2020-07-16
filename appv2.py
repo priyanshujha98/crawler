@@ -2,8 +2,9 @@ from flask import Flask,render_template,request,redirect,url_for, make_response,
 
 from dbtest import get_everything, get_index, get_data_index, display_data, get_data,get_only_data, get_data_count
 
+#from apscheduler.schedulers.background import BackgroundScheduler
 
-from tryv1 import grab_data
+#from tryv1 import grab_data
 
 app = Flask(__name__)
 
@@ -337,5 +338,12 @@ def clearsession():
     session.clear()
     return redirect(url_for('home'))
 
-if __name__=='__main__':
-        app.run(debug=False)
+#if __name__=='__main__':
+ #       app.run(debug=False)
+
+def job():
+     grab_data()
+
+#scheduler = BackgroundScheduler()
+#scheduler.add_job(func = job, trigger= 'interval', minutes=60)
+#scheduler.start()

@@ -8,7 +8,7 @@ def send_data(data,index_name):
     
 def search(title,index_name):
     es = Elasticsearch(['localhost:9200'])
-    r = es.search(index = index_name, body={'query':{'match':{'Title':title}}})
+    r = es.search(index = index_name, body={'query':{'match':{'Title':title}}},size=1000)
     
     test = r['hits']['max_score']    
     return test
@@ -17,7 +17,7 @@ def get_data(search, index_name):
     es = Elasticsearch(['localhost:9200'])
     result = pd.DataFrame()
     for k in search:
-        r = es.search(index = index_name, body={'query':{'match':{'full_text':k}}})
+        r = es.search(index = index_name, body={'query':{'match':{'full_text':k}}},size=1000)
         
         test = r['hits']['hits']
         
@@ -36,7 +36,7 @@ def get_data(search, index_name):
 
 def display_data(search, index_name):
     es = Elasticsearch(['localhost:9200'])
-    r = es.search(index = index_name, body={'query':{'match':{'_id':search}}})
+    r = es.search(index = index_name, body={'query':{'match':{'_id':search}}},size=1000)
     
     test = r['hits']['hits']
     
@@ -56,7 +56,7 @@ def display_data(search, index_name):
 def get_data_index(index):
     es = Elasticsearch(['localhost:9200'])
     result = pd.DataFrame()
-    r = es.search(index = index)
+    r = es.search(index = index,size=1000)
     
     test = r['hits']['hits']    
     
@@ -80,7 +80,7 @@ def get_index():
     final_list=[]
     count = []
     for i in total:
-        r = es.search(index = i)
+        r = es.search(index = i,size = 1000)
     
         test = r['hits']['hits']    
         final_list.append(i)
@@ -96,7 +96,7 @@ def get_everything():
     
     result = pd.DataFrame()
     for j in total:    
-        r = es.search(index = j)
+        r = es.search(index = j,size=1000)
         
         test = r['hits']['hits']    
         
@@ -119,7 +119,7 @@ def get_only_data(search):
     result = pd.DataFrame()
     for j in total:    
         for k in search:
-            r = es.search(index = j, body={'query':{'match':{'full_text':k}}})
+            r = es.search(index = j, body={'query':{'match':{'full_text':k}}},size=1000)
             
             test = r['hits']['hits']    
             
@@ -142,7 +142,7 @@ def get_data_count(search):
     result = pd.DataFrame()
     for j in total:    
         for k in search:
-            r = es.search(index = j, body={'query':{'match':{'full_text':k}}})
+            r = es.search(index = j, body={'query':{'match':{'full_text':k}}},size=1000)
             
             test = r['hits']['hits']    
             
