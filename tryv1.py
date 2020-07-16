@@ -191,7 +191,7 @@ def grab_data():
     
     final = pd.DataFrame({'Title':headline,'Author':AUTHORS,'Summary':SUMMARY,
                               'full_text':full,'date_published':timestamp, 'date_crawled':date_crawled,
-                              'news_source':news_source,'img':img_url,'keywords':keywords,'url_news':url_news,'types':types})
+                              'news_source':news_source,'img':img_url,'keywords':keywords,'url_news':url_news,'Types':types})
         
     for i in final.index:
         try:
