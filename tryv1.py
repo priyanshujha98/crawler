@@ -138,7 +138,18 @@ def grab_data():
             driver = webdriver.Chrome('/usr/bin/chromedriver',chrome_options = chrome_options)
             driver.get(i)
             details = newspaper(i)
-            news_source.append(i)
+            
+            if 'bbc' in i:
+                news_source.append('bbc')
+            elif 'techcrunch' in i:
+                news_source.append('techcrunch')
+            elif 'theguardian' in i:
+                news_source.append('theguardian')
+            elif 'voanews' in i:
+                news_source.append('voanews')
+            elif 'abc.net' in i:
+                news_source.append('abc')
+                
             headline.append(details.headline)
             timestamp.append(details.date_publish)
             url_news.append(i)
