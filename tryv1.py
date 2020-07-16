@@ -215,7 +215,7 @@ def grab_data():
             try:
                 count = search(t.loc[0]['Title'],t.loc[0]['news_source'])
                 #print(count)
-                if count < 25 :
+                if count < 25 or count==None :
                     test =t.loc[0].to_json()
                     send_data(test,t.loc[0]['news_source'])
                     #print('Data sent')
